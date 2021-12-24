@@ -24,4 +24,9 @@ module.exports = {
         raw: true,
       });
   },
+  configureWebpack: {
+    externals: {
+      BMap: "BMap",
+    },
+  },
 };

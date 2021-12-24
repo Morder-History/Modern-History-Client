@@ -12,6 +12,7 @@
     "release": "standard-version"
   },
   "dependencies": {
+    "@vueuse/core": "^6.1.0",
     "core-js": "^3.6.5",
     "echarts": "^5.2.2",
     "github-markdown-css": "^5.1.0",
