@@ -159,11 +159,6 @@ export default {
           jumpBox.value = true;
         }
       });
-
-      // 滚轮事件
-      myChart.on("scroll", function (params) {
-        console.log(params);
-      });
     });
 
     // 点击X
@@ -179,81 +174,4 @@ export default {
 };
 </script>
 
-<style>
-.right-info {
-  display: none;
-  position: absolute;
-  right: 8px;
-  top: 66px;
-  width: 320px;
-  z-index: 11;
-}
-
-.right-info .territory-component {
-  position: relative;
-  background-color: #fff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07);
-  transition: height 0.3s ease;
-}
-
-.right-info .territory-component .territory-wrap {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 0 28px;
-  height: 100%;
-}
-
-.territory-component .territory-wrap .title {
-  padding: 12px 0;
-  line-height: 20px;
-  font-weight: 700;
-  margin: 0 24px;
-  border-bottom: 1px solid hsla(0, 0%, 59.2%, 0.22);
-}
-
-.desc-box {
-  height: 352px;
-  margin: 9px 16px 0 24px;
-  flex: 1;
-  overflow: auto;
-}
-
-.desc-box::-webkit-scrollbar {
-  width: 6px;
-  background-color: #f5f5f5;
-}
-
-.desc-box::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-}
-
-.desc-box::-webkit-scrollbar-track {
-  background-color: #f5f5f5;
-}
-
-.territoryDesc {
-  position: relative;
-  padding-right: 8px;
-  line-height: 18px;
-  font-size: 12px;
-  height: 100%;
-  color: #666;
-}
-
-.close-icon {
-  background-image: url(https://static.allhistory.com/online/view/Map/img/close-icon.f6a6.png);
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50%;
-}
-
-.active {
-  display: block;
-}
-</style>
+<style></style>
