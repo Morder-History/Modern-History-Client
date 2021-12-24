@@ -96,6 +96,7 @@
 <script lang="ts" setup>
 import { ref } from "@vue/reactivity";
 import { getHomePageData } from "@/api/home";
+<<<<<<< HEAD
 interface HomePageData {
   id: number;
   title: string;
@@ -117,6 +118,12 @@ const homeData = ref<HomePageData[]>([]);
 
 const getData = () => {
   getHomePageData().then((res: any) => {
+=======
+
+const homeData = ref([]);
+const getData = () => {
+  getHomePageData().then((res) => {
+>>>>>>> eff69764073ca83a5e72d4b7ef7849aa9e98f207
     console.log(res);
     if (res.code === 200) {
       homeData.value = res.data;
