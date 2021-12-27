@@ -1,5 +1,5 @@
 <template>
-  <div id="echarts" style="width: 100%; height: 100%" ref="target"></div>
+  <div id="container"></div>
   <!-- 战争信息弹框 -->
   <div class="right-info" :class="{ active: jumpBox }" ref="targetDom">
     <div class="territory-info-container">
@@ -31,309 +31,107 @@
 </template>
 
 <script setup>
-import * as echarts from "echarts";
-import "echarts/extension/bmap/bmap";
-import BMap from "BMap";
+import BMapGL from "BMapGL";
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
-// 地图dom
-let target = ref(null);
+let jumpBox = ref(false);
+let flag = ref(false);
 // 弹出框dom
 let targetDom = ref();
-// 标签经纬度
-let labelDegree = ref();
-
-// 地图数据
-let bmapList = ref({
-  center: [106.28, 38.47],
-  roam: true,
-  mapStyle: {
-    styleJson: [
-      {
-        featureType: "water",
-        elementType: "all",
-        stylers: {
-          color: "#d1d1d1",
-        },
-      },
-      {
-        featureType: "land",
-        elementType: "all",
-        stylers: {
-          color: "#f3f3f3",
-        },
-      },
-      {
-        featureType: "railway",
-        elementType: "all",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "highway",
-        elementType: "all",
-        stylers: {
-          color: "#fdfdfd",
-        },
-      },
-      {
-        featureType: "highway",
-        elementType: "labels",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "arterial",
-        elementType: "geometry",
-        stylers: {
-          color: "#fefefe",
-        },
-      },
-      {
-        featureType: "arterial",
-        elementType: "geometry.fill",
-        stylers: {
-          color: "#fefefe",
-        },
-      },
-      {
-        featureType: "poi",
-        elementType: "all",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "green",
-        elementType: "all",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "subway",
-        elementType: "all",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "manmade",
-        elementType: "all",
-        stylers: {
-          color: "#d1d1d1",
-        },
-      },
-      {
-        featureType: "local",
-        elementType: "all",
-        stylers: {
-          color: "#d1d1d1",
-        },
-      },
-      {
-        featureType: "arterial",
-        elementType: "labels",
-        stylers: {
-          visibility: "off",
-        },
-      },
-      {
-        featureType: "boundary",
-        elementType: "all",
-        stylers: {
-          color: "#fefefe",
-        },
-      },
-      {
-        featureType: "building",
-        elementType: "all",
-        stylers: {
-          color: "#d1d1d1",
-        },
-      },
-      {
-        featureType: "label",
-        elementType: "labels.text.fill",
-        stylers: {
-          color: "#999999",
-        },
-      },
-    ],
-  },
-});
-// 标点数据
-let seriesList = ref([
-  // 标点内部属性
-  {
-    name: "scatter_inside",
-    type: "scatter",
-    coordinateSystem: "bmap",
-    data: [
-      {
-        name: "九·一八事变",
-        value: [123.43, 41.8, 45689],
-      },
-    ],
-    symbolSize: 10,
-    encode: {
-      value: 2,
-    },
-    label: {
-      formatter: "{b}",
-      position: "right",
-      show: false,
-    },
-    emphasis: {
-      label: {
-        show: true,
-      },
-    },
-  },
-  // 带有涟漪特效动画的标点
-  {
-    name: "scatter_outside",
-    type: "effectScatter",
-    coordinateSystem: "bmap",
-    data: [
-      {
-        name: "九·一八事变",
-        value: [123.43, 41.8, 11],
-      },
-    ],
-    symbolSize: 30,
-    encode: {
-      value: 2,
-    },
-    showEffectOn: "render",
-    rippleEffect: {
-      brushType: "stroke",
-    },
-    label: {
-      formatter: "{b}",
-      position: "right",
-      show: true,
-    },
-    itemStyle: {
-      shadowBlur: 10,
-      shadowColor: "#333",
-    },
-    emphasis: {
-      scale: true,
-    },
-    zlevel: 1,
-  },
-]);
-
-// 判断是否显示弹框
-let jumpBox = ref(false);
 
 onMounted(() => {
-  let myChart = echarts.init(target.value);
-  let timer = null;
+  // 创建地图实例
+  let map = new BMapGL.Map("container");
 
-  let option = {
-    bmap: bmapList.value,
-  };
+  // 初始化地图，设置中心点坐标和地图初始级别
+  let point = new BMapGL.Point(106.28, 38.47);
+  map.centerAndZoom(point, 5);
 
-  myChart.setOption({
-    ...option,
-    series: seriesList.value,
+  //开启鼠标滚轮缩放
+  map.enableScrollWheelZoom();
+  // 禁止双击放大地图
+  map.disableDoubleClickZoom();
+
+  // 限制地图级别
+  map.setMinZoom(5);
+  map.setMaxZoom(7);
+
+  // 比例尺控件
+  map.addControl(new BMapGL.ScaleControl());
+
+  // 创建战争点标记
+  let marker1 = new BMapGL.Marker(new BMapGL.Point(123.43, 41.8));
+  marker1.setZIndex(999);
+  // 地址解析获取对应经纬度
+  let pt = new BMapGL.Point(123.43, 41.8);
+
+  // 创建战争圈标记1
+  // https://lbs.baidu.com/jsdemo.htm#eMarker3d
+  let marker2 = new BMapGL.Marker3D(pt, 0, {
+    size: 200,
+    shape: 1,
+    fillCoor: "#9bcffa",
+    fillOpacity: 0.3,
   });
-  console.log(myChart);
+  marker2.setZIndex(888);
 
-  // 地图控件
-  bmapControl(myChart);
-  // 地图事件
-  // bmapEvent(myChart, bb.value);
+  // 地图标记点击事件
+  let timer = null;
+  marker1.addEventListener("click", function () {
+    flag.value = true;
+    // 将标点移动到中心
+    let point = new BMapGL.Point(123.43, 41.8);
+    map.panTo(point);
 
-  // 点击标签，将其定位为地图中心
-  myChart.on("click", (params) => {
-    if (params.value) {
-      // 获取地图实例
-      let bmap = myChart.getModel().getComponent("bmap").getBMap();
-      // 该点坐标
-      let thisscale = [params.value[0], params.value[1]];
+    timer = setTimeout(() => {
+      // 地图级别+1
+      map.zoomIn();
+      jumpBox.value = true;
+      clearTimeout(timer);
+    }, 500);
+  });
 
-      labelDegree.value = thisscale;
+  map.addOverlay(marker1);
+  map.addOverlay(marker2);
 
-      // 替换bmap中心经纬度数据，让标点居中
-      let point = new BMap.Point(params.value[0], params.value[1]);
-      bmap.panTo(point);
+  // 监听地图缩放事件
+  map.addEventListener("zoomend", function () {
+    let nowzoom = this.getZoom();
 
-      // 给地图移动到标签上的时间
-      timer = setTimeout(() => {
-        bmap.setZoom(bmap.getZoom() + 1);
-        seriesList.value = [];
+    // let timer = null;
+    if (flag.value) {
+      nowzoom = Math.ceil(nowzoom);
+    }
 
-        // 先清除页面echars缓存
-        myChart.clear();
-        // 再重新创建
-        myChart.setOption({
-          series: seriesList.value,
-        });
+    // 判断当前地图级别是否为5，如果不是则删除标点
+    if (nowzoom >= 6) {
+      this.removeOverlay(marker1);
 
-        // 让信息框显示
-        jumpBox.value = true;
-      }, 1000);
+      flag.value = false;
+    } else if (nowzoom < 6) {
+      this.addOverlay(marker1);
     }
   });
-
-  clearTimeout(timer);
 });
+
+// 点击关闭弹出框
+const handleClose = () => {
+  jumpBox.value = false;
+};
 
 // 当点击到目标dom的外面时隐藏
 onClickOutside(targetDom, () => {
   jumpBox.value = false;
 });
-
-// 点击X
-const handleClose = () => {
-  jumpBox.value = false;
-};
-
-// 百度地图控件
-function bmapControl(myChart) {
-  // 获取地图实例
-  let bmap = myChart.getModel().getComponent("bmap").getBMap();
-  // 比例尺控件
-  let scaleCtrl = new BMap.ScaleControl();
-  bmap.disableDoubleClickZoom();
-
-  // 限制地图级别
-  bmap.setMinZoom(5);
-  bmap.setMaxZoom(7);
-
-  // 添加比例尺控件
-  bmap.addControl(scaleCtrl);
-}
-
-// 百度地图事件
-// function bmapEvent(myChart) {
-//   // 获取地图实例
-//   let bmap = myChart.getModel().getComponent("bmap").getBMap();
-
-//   // 监听鼠标滚轮事件
-//   bmap.addEventListener("zoomend", function () {
-//     // 获取到当前地图放大级别
-//     let ZoomNum = bmap.getZoom();
-//     console.log(ZoomNum);
-//   });
-
-//   // 点击事件
-//   // bmap.addEventListener("click", function () {
-//   //   if (bb) {
-//   //     // console.log("有值");
-//   //     bmap.setZoom(bmap.getZoom() + 2);
-//   //   }
-//   // });
-// }
 </script>
 
 <style>
+#container {
+  width: 100%;
+  height: 100%;
+}
+
 .right-info {
   opacity: 0;
   position: absolute;
