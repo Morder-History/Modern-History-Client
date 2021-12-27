@@ -24,7 +24,6 @@ import HomeShowDetail from "@/views/Home/components/HomeShowDetail.vue";
 import HomeFirstPage from "@/views/Home/components/HomeFirstPage.vue";
 import { ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
-import { HtmlHTMLAttributes } from "@vue/runtime-dom";
 //#region 全屏滚动效果
 const current = ref(0);
 const isScrolling = ref(false);
