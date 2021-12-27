@@ -10560,11 +10560,6 @@ slice-ansi@^5.0.0:
     ansi-styles "^6.0.0"
     is-fullwidth-code-point "^4.0.0"
 
-slidePage@^3.1.4:
-  version "3.2.7"
-  resolved "https://registry.npmmirror.com/slidePage/download/slidePage-3.2.7.tgz#64b1a879a8140a40aa2fd55394877660997c392b"
-  integrity sha1-ZLGoeagUCkCqL9VTlId2YJl8OSs=
-
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -11902,13 +11897,6 @@ vue-router@^4.0.0-0:
   integrity sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==
   dependencies:
     "@vue/devtools-api" "^6.0.0-beta.18"
-
-vue-slidepage@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmmirror.com/vue-slidepage/download/vue-slidepage-1.0.0.tgz#a2796f3101f0d505d1edd87bb51cb8089918c790"
-  integrity sha1-onlvMQHw1QXR7dh7tRy4CJkYx5A=
-  dependencies:
-    slidePage "^3.1.4"
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.3"

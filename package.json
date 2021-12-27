@@ -23,7 +23,6 @@
     "vue-echarts": "^6.0.0",
     "vue-loader": "^17.0.0",
     "vue-router": "^4.0.0-0",
-    "vue-slidepage": "^1.0.0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
