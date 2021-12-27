@@ -7,9 +7,9 @@
   >
     <div class="home-left">
       <!-- 标题名 -->
-      <div class="home-title">
+      <router-link to="/" class="home-title">
         <img src="../../../assets/images/1640179657_348262.png" alt="" />
-      </div>
+      </router-link>
       <!-- 右侧列表栏 -->
       <div class="home-list"><span></span><span></span><span></span></div>
       <!-- 索引展示 -->
@@ -115,10 +115,8 @@ interface HomePageData {
 }
 const homeData = ref<HomePageData[]>([]);
 
-
 const getData = () => {
   getHomePageData().then((res: any) => {
-    console.log(res);
     if (res.code === 200) {
       homeData.value = res.data;
     }
@@ -135,8 +133,7 @@ const toggle = () => {
 const currentIndex = ref(0);
 const handleClike = (step) => {
   const nextStep = (currentIndex.value += step);
-  console.log(nextStep);
-  if (nextStep <= 0) {
+  if (nextStep < 0) {
     currentIndex.value = homeData.value.length - 1;
   } else if (nextStep > homeData.value.length - 1) {
     currentIndex.value = 0;
@@ -145,8 +142,6 @@ const handleClike = (step) => {
   }
   return nextStep;
 };
-//#endregion
-// import DemoPage from "@/Demo/DemoPage.vue";
 </script>
 
 <style lang="scss" scoped>
@@ -352,7 +347,7 @@ const handleClike = (step) => {
     position: relative;
     width: 50%;
     height: 100%;
-    background-color: #ccc;
+    background-color: black;
 
     // 背景图片
     .event-image {
