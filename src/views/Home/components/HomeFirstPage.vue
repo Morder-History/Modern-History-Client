@@ -117,7 +117,8 @@ const homeData = ref<HomePageData[]>([]);
 
 const getData = () => {
   getHomePageData().then((res: any) => {
-    if (res.code === 200) {
+    console.log(res);
+  if (res.code === 200) {
       homeData.value = res.data;
     }
   });
