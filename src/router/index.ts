@@ -3,7 +3,7 @@ import Map from "@/views/Map.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
+    path: "/map",
     name: "Map",
     component: Map,
   },

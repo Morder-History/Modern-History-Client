@@ -1,7 +1,7 @@
 module.exports = {
   configureWebpack: {
     externals: {
-      BMapGL: "BMapGL",
+      BMap: "BMap",
     },
   },
   css: {

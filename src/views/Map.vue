@@ -31,21 +31,22 @@
 </template>
 
 <script setup>
-import BMapGL from "BMapGL";
+import BMap from "BMap";
+import useCustomCover from "../hooks/useCustomCover.js";
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
 let jumpBox = ref(false);
-let flag = ref(false);
 // 弹出框dom
 let targetDom = ref();
+let getNowZoom = ref(5);
 
 onMounted(() => {
   // 创建地图实例
-  let map = new BMapGL.Map("container");
+  let map = new BMap.Map("container");
 
   // 初始化地图，设置中心点坐标和地图初始级别
-  let point = new BMapGL.Point(106.28, 38.47);
+  let point = new BMap.Point(106.28, 38.47);
   map.centerAndZoom(point, 5);
 
   //开启鼠标滚轮缩放
@@ -58,59 +59,47 @@ onMounted(() => {
   map.setMaxZoom(7);
 
   // 比例尺控件
-  map.addControl(new BMapGL.ScaleControl());
+  map.addControl(new BMap.ScaleControl());
 
   // 创建战争点标记
-  let marker1 = new BMapGL.Marker(new BMapGL.Point(123.43, 41.8));
+  let marker1 = new BMap.Marker(new BMap.Point(123.43, 41.8));
+  map.addOverlay(marker1);
   marker1.setZIndex(999);
-  // 地址解析获取对应经纬度
-  let pt = new BMapGL.Point(123.43, 41.8);
 
-  // 创建战争圈标记1
-  // https://lbs.baidu.com/jsdemo.htm#eMarker3d
-  let marker2 = new BMapGL.Marker3D(pt, 0, {
-    size: 200,
-    shape: 1,
-    fillCoor: "#9bcffa",
-    fillOpacity: 0.3,
-  });
-  marker2.setZIndex(888);
+  // 创建战争圈标记
+  let mySquare = new useCustomCover(new BMap.Point(123.43, 41.8), 200, "red");
+  map.addOverlay(mySquare);
+  mySquare._div.style.display = "none";
 
   // 地图标记点击事件
   let timer = null;
   marker1.addEventListener("click", function () {
-    flag.value = true;
     // 将标点移动到中心
-    let point = new BMapGL.Point(123.43, 41.8);
+    let point = new BMap.Point(123.43, 41.8);
     map.panTo(point);
 
-    timer = setTimeout(() => {
-      // 地图级别+1
-      map.zoomIn();
-      jumpBox.value = true;
-      clearTimeout(timer);
-    }, 500);
-  });
+    if (getNowZoom.value == 5) {
+      timer = setTimeout(() => {
+        // 地图级别+1
+        map.zoomIn();
+        clearTimeout(timer);
+      }, 500);
+    }
 
-  map.addOverlay(marker1);
-  map.addOverlay(marker2);
+    // 让弹出框显示
+    jumpBox.value = true;
+  });
 
   // 监听地图缩放事件
   map.addEventListener("zoomend", function () {
     let nowzoom = this.getZoom();
-
-    // let timer = null;
-    if (flag.value) {
-      nowzoom = Math.ceil(nowzoom);
-    }
+    getNowZoom.value = nowzoom;
 
     // 判断当前地图级别是否为5，如果不是则删除标点
     if (nowzoom >= 6) {
-      this.removeOverlay(marker1);
-
-      flag.value = false;
+      mySquare._div.style.display = "";
     } else if (nowzoom < 6) {
-      this.addOverlay(marker1);
+      mySquare._div.style.display = "none";
     }
   });
 });
@@ -127,6 +116,19 @@ onClickOutside(targetDom, () => {
 </script>
 
 <style>
+.BMap_cpyCtrl {
+  display: none;
+}
+
+.anchorBL a {
+  display: none;
+}
+
+.BMap_scaleCtrl {
+  bottom: 6px !important;
+  left: 6px !important;
+}
+
 #container {
   width: 100%;
   height: 100%;
