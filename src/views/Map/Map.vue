@@ -30,10 +30,12 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+// @ts-nocheck
 import BMap from "BMap";
-import useCustomCover from "../hooks/useCustomCover.js";
-import useRandomCustom from "../hooks/useRandomCustom";
+import useCustomCover from "@/hooks/useCustomCover";
+import useRandomCustom from "@/hooks/useRandomCustom";
+import { getMapPageData } from "@/api/map";
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
@@ -41,10 +43,17 @@ let jumpBox = ref(false);
 // 弹出框dom
 let targetDom = ref();
 let getNowZoom = ref(5);
+let warList = ref();
+
+getMapPageData().then((res) => {
+  warList.value = res;
+});
 
 onMounted(() => {
   // 创建地图实例
   let map = new BMap.Map("container");
+
+  // console.log(data);
 
   // 初始化地图，设置中心点坐标和地图初始级别
   let point = new BMap.Point(106.28, 38.47);
@@ -62,10 +71,41 @@ onMounted(() => {
   // 比例尺控件
   map.addControl(new BMap.ScaleControl());
 
-  // 创建战争点标记
-  let marker1 = new BMap.Marker(new BMap.Point(123.43, 41.8));
-  map.addOverlay(marker1);
-  marker1.setZIndex(999);
+  // 存放战争标记信息
+  let warSquareArr = [];
+  let data = [
+    {
+      place: "沈阳",
+      lon: 123.43,
+      lat: 41.8,
+    },
+  ];
+  // 循环遍历添加一个或多个战争标记
+  for (let i = 0; i < data.length; i++) {
+    let marker = new BMap.Marker(new BMap.Point(data[i].lon, data[i].lat));
+    map.addOverlay(marker);
+    marker.setZIndex(999);
+    warSquareArr.push(marker);
+
+    // 地图标记点击事件
+    let timer = null;
+    marker.addEventListener("click", function () {
+      // 将标点移动到中心
+      let point = new BMap.Point(data[i].lon, data[i].lat);
+      map.panTo(point);
+
+      if (getNowZoom.value == 5) {
+        timer = setTimeout(() => {
+          // 地图级别+1
+          map.setZoom(map.getZoom() + 2);
+          clearTimeout(timer);
+        }, 500);
+      }
+
+      // 让弹出框显示
+      jumpBox.value = true;
+    });
+  }
 
   // 创建战争圈标记
   let mySquare = new useCustomCover(new BMap.Point(123.43, 41.8), 200, "red");
@@ -90,35 +130,16 @@ onMounted(() => {
     let peopleSquare = new useRandomCustom(
       new BMap.Point(peopleArr[i].lon, peopleArr[i].lat),
       40,
-      "https://bkimg.cdn.bcebos.com/pic/1f178a82b9014a90f1da88d3ab773912b21beefc?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2U5Mg==,g_7,xp_5,yp_5/format,f_auto"
+      "https://s4.ax1x.com/2021/12/28/Trrq2R.jpg"
     );
     map.addOverlay(peopleSquare);
-    peopleSquare._div.style.display = "none";
+    peopleSquare.hide();
     peopleSquareArr.push(peopleSquare);
     peopleSquare.addEventListener("click", function () {
       console.log(11);
     });
   }
   // console.log(peopleSquareArr);
-
-  // 地图标记点击事件
-  let timer = null;
-  marker1.addEventListener("click", function () {
-    // 将标点移动到中心
-    let point = new BMap.Point(123.43, 41.8);
-    map.panTo(point);
-
-    if (getNowZoom.value == 5) {
-      timer = setTimeout(() => {
-        // 地图级别+1
-        map.setZoom(map.getZoom() + 2);
-        clearTimeout(timer);
-      }, 500);
-    }
-
-    // 让弹出框显示
-    jumpBox.value = true;
-  });
 
   // 监听地图缩放事件
   map.addEventListener("zoomend", function () {
@@ -130,22 +151,17 @@ onMounted(() => {
     if (nowzoom == 7) {
       mySquare._div.style.display = "";
 
-      // for (let i = 1; i <= peopleSquareArr.length; i++) {
-      //   (function (j) {
-      //     setTimeout(() => {
-      //       console.log(j);
-      //     }, 1000 * j);
-      //   })(i);
-      // }
+      // 将人物标记逐一展示
       peopleSquareArr.forEach((item, index) => {
         setTimeout(() => {
-          // item._div.style.display = "";
-          item.toggle();
-        }, 1000 * (index + 1));
+          console.log(item.show());
+          item.show();
+        }, 600 * (index + 1));
       });
     } else if (nowzoom < 7) {
       mySquare._div.style.display = "none";
-      peopleSquareArr.forEach((item) => (item._div.style.display = "none"));
+
+      peopleSquareArr.forEach((item) => item.hide());
     }
   });
 });
@@ -235,7 +251,7 @@ onClickOutside(targetDom, () => {
   position: relative;
   padding-right: 8px;
   line-height: 18px;
-  font-size: 12px;
+  font-size: 14px;
   height: 100%;
   color: #666;
 }

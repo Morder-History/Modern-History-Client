@@ -1,4 +1,6 @@
+// @ts-nocheck
 import BMap from "BMap";
+// const BMap = require("BMap");
 
 export default function SquareOverlay(center, length, backgroundImage) {
   // console.log(this);
@@ -15,7 +17,7 @@ SquareOverlay.prototype.initialize = function (map) {
   // 保存map对象实例
   this._map = map;
   // 创建div元素，作为自定义覆盖物的容器
-  var div = document.createElement("div");
+  const div = document.createElement("div");
   div.style.position = "absolute";
   // 可以根据参数设置元素外观
   div.style.width = this._length + "px";
@@ -37,29 +39,45 @@ SquareOverlay.prototype.initialize = function (map) {
 // 绘制地图覆盖物
 SquareOverlay.prototype.draw = function () {
   // 根据地理坐标转换为像素坐标，并设置给容器
-  var position = this._map.pointToOverlayPixel(this._center);
+  const position = this._map.pointToOverlayPixel(this._center);
   // console.log(position);
   this._div.style.left = position.x - this._length / 2 + "px";
   this._div.style.top = position.y - this._length / 2 + "px";
 };
 
 // 手动控制覆盖物显示隐藏
-SquareOverlay.prototype.toggle = function () {
-  // console.log(this._div);
-  if (this._div) {
-    if (this._div.style.display == "none") {
-      // this.hide();
-      this._div.style.opacity = 0;
-      this._div.style.transition = "all 0.5s";
-    } else {
-      // this.show();
-      this._div.style.opacity = 1;
-      this._div.style.transition = "all 0.5s";
-    }
-  }
-};
+// SquareOverlay.prototype.toggle = function () {
+//   // console.log(this._div);
+//   if (this._div) {
+//     if (this._div.style.display == "none") {
+//       // this.hide();
+//       this._div.style.opacity = 0;
+//       this._div.style.transition = "all 0.5s";
+//     } else {
+//       // this.show();
+//       this._div.style.opacity = 1;
+//       this._div.style.transition = "all 0.5s";
+//     }
+//   }
+// };
 
 // 自定义覆盖物事件样板
 SquareOverlay.prototype.addEventListener = function (event, fun) {
   this._div["on" + event] = fun;
+};
+
+// 手动控制覆盖物显示
+SquareOverlay.prototype.show = function () {
+  // console.log(this._div);
+  if (this._div) {
+    this._div.style.opacity = 1;
+    this._div.style.transition = "all 3s";
+  }
+};
+
+// 手动控制覆盖物隐藏
+SquareOverlay.prototype.hide = function () {
+  if (this._div) {
+    this._div.style.opacity = 0;
+  }
 };
