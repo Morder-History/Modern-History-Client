@@ -33,6 +33,7 @@
 <script setup>
 import BMap from "BMap";
 import useCustomCover from "../hooks/useCustomCover.js";
+import useRandomCustom from "../hooks/useRandomCustom";
 import { onMounted, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
@@ -71,6 +72,35 @@ onMounted(() => {
   map.addOverlay(mySquare);
   mySquare._div.style.display = "none";
 
+  // 创建战争圈主要人物
+  // 标记位置（手动）
+  let peopleArr = [
+    { lon: 124.67, lat: 41.8 },
+    { lon: 123.84, lat: 41.17 },
+    { lon: 122.6, lat: 41.39 },
+    { lon: 122.4, lat: 42.39 },
+    { lon: 123.88, lat: 42.78 },
+  ];
+
+  // 存放人物标记信息
+  let peopleSquareArr = [];
+
+  // 循环遍历添加多个人物标记
+  for (let i = 0; i < peopleArr.length; i++) {
+    let peopleSquare = new useRandomCustom(
+      new BMap.Point(peopleArr[i].lon, peopleArr[i].lat),
+      40,
+      "https://bkimg.cdn.bcebos.com/pic/1f178a82b9014a90f1da88d3ab773912b21beefc?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2U5Mg==,g_7,xp_5,yp_5/format,f_auto"
+    );
+    map.addOverlay(peopleSquare);
+    peopleSquare._div.style.display = "none";
+    peopleSquareArr.push(peopleSquare);
+    peopleSquare.addEventListener("click", function () {
+      console.log(11);
+    });
+  }
+  // console.log(peopleSquareArr);
+
   // 地图标记点击事件
   let timer = null;
   marker1.addEventListener("click", function () {
@@ -81,7 +111,7 @@ onMounted(() => {
     if (getNowZoom.value == 5) {
       timer = setTimeout(() => {
         // 地图级别+1
-        map.zoomIn();
+        map.setZoom(map.getZoom() + 2);
         clearTimeout(timer);
       }, 500);
     }
@@ -93,13 +123,29 @@ onMounted(() => {
   // 监听地图缩放事件
   map.addEventListener("zoomend", function () {
     let nowzoom = this.getZoom();
+    // let timer = null;
     getNowZoom.value = nowzoom;
 
     // 判断当前地图级别是否为5，如果不是则删除标点
-    if (nowzoom >= 6) {
+    if (nowzoom == 7) {
       mySquare._div.style.display = "";
-    } else if (nowzoom < 6) {
+
+      // for (let i = 1; i <= peopleSquareArr.length; i++) {
+      //   (function (j) {
+      //     setTimeout(() => {
+      //       console.log(j);
+      //     }, 1000 * j);
+      //   })(i);
+      // }
+      peopleSquareArr.forEach((item, index) => {
+        setTimeout(() => {
+          // item._div.style.display = "";
+          item.toggle();
+        }, 1000 * (index + 1));
+      });
+    } else if (nowzoom < 7) {
       mySquare._div.style.display = "none";
+      peopleSquareArr.forEach((item) => (item._div.style.display = "none"));
     }
   });
 });

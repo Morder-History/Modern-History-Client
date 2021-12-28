@@ -1,16 +1,17 @@
 import BMap from "BMap";
 
-export default function ComplexCustomOverlay(center, length, color) {
+export default function SquareOverlay(center, length, backgroundImage) {
+  // console.log(this);
   this._center = center;
   this._length = length;
-  this._color = color;
+  this._backgroundImage = backgroundImage;
 }
 // 复杂的自定义覆盖物
 // 定义自定义覆盖物的构造函数
-ComplexCustomOverlay.prototype = new BMap.Overlay();
+SquareOverlay.prototype = new BMap.Overlay();
 
 // 初始化自定义覆盖物
-ComplexCustomOverlay.prototype.initialize = function (map) {
+SquareOverlay.prototype.initialize = function (map) {
   // 保存map对象实例
   this._map = map;
   // 创建div元素，作为自定义覆盖物的容器
@@ -19,9 +20,11 @@ ComplexCustomOverlay.prototype.initialize = function (map) {
   // 可以根据参数设置元素外观
   div.style.width = this._length + "px";
   div.style.height = this._length + "px";
-  div.style.opacity = 0.2;
   div.style.borderRadius = "50%";
-  div.style.background = this._color;
+  div.style.backgroundImage = "url(" + this._backgroundImage + ")";
+  div.style.backgroundSize = "100% 100%";
+  div.style.cursor = "pointer";
+  div.style.opacity = 0;
   // 将div添加到覆盖物容器中
   map.getPanes().markerPane.appendChild(div);
   // 保存div实例
@@ -32,7 +35,7 @@ ComplexCustomOverlay.prototype.initialize = function (map) {
 };
 
 // 绘制地图覆盖物
-ComplexCustomOverlay.prototype.draw = function () {
+SquareOverlay.prototype.draw = function () {
   // 根据地理坐标转换为像素坐标，并设置给容器
   var position = this._map.pointToOverlayPixel(this._center);
   // console.log(position);
@@ -41,13 +44,22 @@ ComplexCustomOverlay.prototype.draw = function () {
 };
 
 // 手动控制覆盖物显示隐藏
-ComplexCustomOverlay.prototype.toggle = function () {
-  console.log(this._div);
+SquareOverlay.prototype.toggle = function () {
+  // console.log(this._div);
   if (this._div) {
-    if (this._div.style.display == "") {
-      this.hide();
+    if (this._div.style.display == "none") {
+      // this.hide();
+      this._div.style.opacity = 0;
+      this._div.style.transition = "all 0.5s";
     } else {
-      this.show();
+      // this.show();
+      this._div.style.opacity = 1;
+      this._div.style.transition = "all 0.5s";
     }
   }
+};
+
+// 自定义覆盖物事件样板
+SquareOverlay.prototype.addEventListener = function (event, fun) {
+  this._div["on" + event] = fun;
 };
