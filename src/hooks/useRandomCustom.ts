@@ -45,22 +45,6 @@ SquareOverlay.prototype.draw = function () {
   this._div.style.top = position.y - this._length / 2 + "px";
 };
 
-// 手动控制覆盖物显示隐藏
-// SquareOverlay.prototype.toggle = function () {
-//   // console.log(this._div);
-//   if (this._div) {
-//     if (this._div.style.display == "none") {
-//       // this.hide();
-//       this._div.style.opacity = 0;
-//       this._div.style.transition = "all 0.5s";
-//     } else {
-//       // this.show();
-//       this._div.style.opacity = 1;
-//       this._div.style.transition = "all 0.5s";
-//     }
-//   }
-// };
-
 // 自定义覆盖物事件样板
 SquareOverlay.prototype.addEventListener = function (event, fun) {
   this._div["on" + event] = fun;
@@ -71,7 +55,7 @@ SquareOverlay.prototype.show = function () {
   // console.log(this._div);
   if (this._div) {
     this._div.style.opacity = 1;
-    this._div.style.transition = "all 3s";
+    this._div.style.transition = "all 2s";
   }
 };
 
