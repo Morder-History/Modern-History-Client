@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 ("HomeShowDetail");
+// 初始化数据
 const warFight = ref([
   {
     id: 1,
