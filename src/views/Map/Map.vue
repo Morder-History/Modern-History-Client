@@ -1,47 +1,70 @@
 <template>
   <!-- 地图 -->
-  <MapPage @handleOpen="handleOpen"></MapPage>
+  <MapPage
+    @handleWarOpen="handleWarOpenOrClose"
+    @handlePeopleOpen="handlePeopleOpenOrClose"
+    @handleGetPeopleSeat="handleGetPeopleSeat"
+  ></MapPage>
   <!-- 战争信息弹框 -->
-  <WarPopup :jumpBox="jumpBox"></WarPopup>
+  <WarPopup
+    :jumpWarBox="jumpWarBox"
+    @handleWarClose="handleWarOpenOrClose"
+  ></WarPopup>
+  <!-- 人物信息弹框 -->
+  <PeoplePage
+    :jumpPeopleBox="jumpPeopleBox"
+    :peopleSeat="peopleSeat"
+    @handlePeopleClose="handlePeopleOpenOrClose"
+  ></PeoplePage>
 </template>
 
 <script lang="ts">
 import MapPage from "./components/MapPage.vue";
 import WarPopup from "./components/WarPopup.vue";
+import PeoplePage from "./components/PeoplePage.vue";
 import { ref } from "vue";
-import { onClickOutside } from "@vueuse/core";
 
 export default {
   setup() {
-    let jumpBox = ref(false);
-    // 弹出框dom
-    let targetDom = ref();
+    // 战争信息弹框
+    let jumpWarBox = ref(false);
+    // 人物信息弹框
+    let jumpPeopleBox = ref(false);
+    // 人物信息框位置
+    let peopleSeat = ref({ x: 200, y: 300 });
 
-    // 显示战争弹出框
-    const handleOpen = (value) => {
-      console.log(value);
-      jumpBox.value = value;
+    // 显示/隐藏战争弹出框
+    const handleWarOpenOrClose = (value) => {
+      jumpWarBox.value = value;
     };
 
-    // 点击关闭弹出框
-    const handleClose = () => {
-      jumpBox.value = false;
+    // 显示/隐藏人物弹出框
+    const handlePeopleOpenOrClose = (value) => {
+      jumpPeopleBox.value = value;
     };
 
-    // 当点击到目标dom的外面时隐藏
-    onClickOutside(targetDom, () => {
-      jumpBox.value = false;
-    });
+    // 获取人物标记页面位置
+    const handleGetPeopleSeat = (value) => {
+      peopleSeat.value = {
+        x: value.x,
+        y: value.y,
+      };
+      // console.log(peopleSeat.value);
+    };
 
     return {
-      jumpBox,
-      handleOpen,
-      handleClose,
+      jumpWarBox,
+      jumpPeopleBox,
+      peopleSeat,
+      handleWarOpenOrClose,
+      handlePeopleOpenOrClose,
+      handleGetPeopleSeat,
     };
   },
   components: {
     MapPage,
     WarPopup,
+    PeoplePage,
   },
 };
 </script>

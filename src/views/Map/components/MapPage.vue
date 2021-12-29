@@ -66,7 +66,7 @@ export default {
 
           // 让弹出框显示
           // jumpBox.value = true;
-          emit("handleOpen", true);
+          emit("handleWarOpen", true);
         });
       }
 
@@ -88,10 +88,8 @@ export default {
         { lon: 122.4, lat: 42.39 },
         { lon: 123.88, lat: 42.78 },
       ];
-
       // 存放人物标记信息
       let peopleSquareArr = [];
-
       // 循环遍历添加多个人物标记
       for (let i = 0; i < peopleArr.length; i++) {
         let peopleSquare = new useRandomCustom(
@@ -102,11 +100,19 @@ export default {
         map.addOverlay(peopleSquare);
         peopleSquare.hide();
         peopleSquareArr.push(peopleSquare);
+        // 人物标记点击
         peopleSquare.addEventListener("click", function () {
-          console.log(11);
+          console.log(peopleSquare);
+          console.log(peopleSquare._div.offsetLeft);
+          // console.log(peopleSquare.ca.offsetTop);
+          // let obj = {
+          //   x: peopleSquare.ca.offsetLeft,
+          //   y: peopleSquare.ca.offsetTop,
+          // };
+          emit("handlePeopleOpen", true);
+          // emit("handleGetPeopleSeat", obj);
         });
       }
-      // console.log(peopleSquareArr);
 
       // 监听地图缩放事件
       map.addEventListener("zoomend", function () {
@@ -153,5 +159,6 @@ export default {
 #container {
   width: 100%;
   height: 100%;
+  z-index: 888;
 }
 </style>

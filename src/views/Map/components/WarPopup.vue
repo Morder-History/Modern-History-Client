@@ -1,5 +1,5 @@
 <template>
-  <div class="right-info" :class="{ active: jumpBox }" ref="targetDom">
+  <div class="right-info" :class="{ active: jumpWarBox }" ref="targetWarDom">
     <div class="territory-info-container">
       <div class="territory-component">
         <div class="territory-box">
@@ -29,8 +29,29 @@
 </template>
 
 <script>
+import { onClickOutside } from "@vueuse/core";
+import { ref } from "vue";
+
 export default {
-  props: ["jumpBox"],
+  props: ["jumpWarBox", "modelValue"],
+  setup(props, { emit }) {
+    // 弹出框dom
+    let targetWarDom = ref();
+
+    const handleClose = () => {
+      emit("handleWarClose", false);
+    };
+
+    // 当点击到目标dom的外面时隐藏
+    onClickOutside(targetWarDom, () => {
+      emit("handleWarClose", false);
+    });
+
+    return {
+      targetWarDom,
+      handleClose,
+    };
+  },
 };
 </script>
 
