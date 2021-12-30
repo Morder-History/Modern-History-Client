@@ -156,6 +156,7 @@ onMounted(() => {
     font-size: 32px;
     color: #851d20;
     border-radius: 30px;
+    margin-bottom: 40px;
   }
   // 时间轴样式
   .timeline {
