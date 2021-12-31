@@ -8,11 +8,11 @@ const config = {
   timeout: 60 * 1000, // Timeout,
   withCredentials: false, // Check cross-site Access-Control
   header: {
-    'Access-Control-Allow-Origin': '*',
+    "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "X-Requested-With,Content-Type",
     "Access-Control-Allow-Methods": "PUT,POST,GET,DELETE,OPTIONS",
     "Content-Type": "application/json;charset=utf-8",
-  }
+  },
 };
 
 // 创建一个 axios 实例对象，用于配置项目应用相关请求
