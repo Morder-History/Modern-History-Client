@@ -1,7 +1,7 @@
 <template>
   <div class="home-second">
     <!-- 时间轴 -->
-    <div class="second-left test-1" @mouseenter.prevent="stopMove">
+    <div class="second-left test-1">
       <div class="timeline-title">
         <h2>抗日战争十大战役</h2>
       </div>
@@ -15,20 +15,15 @@
     </div>
     <!-- 书 -->
     <div class="second-right">
-      <div class="book">
-        <div
-          class="paper current"
-          v-for="item in 5"
-          :key="item"
-          ref="paperTarget"
-        >
-          <div class="page front" @click="flipPageFont">
-            <label>front</label>
-          </div>
-          <div class="page back" @click="flipPageBack">
-            <label>back</label>
-          </div>
+      <!-- /* box为整个页面展示区 */ -->
+      <div id="box">
+        <!-- /* page有前后两面 */ -->
+        <div class="page" v-for="item in 5" :key="item">
+          <div class="front" @click="togoleRegister(true)">front</div>
+          <div class="back" @click="togoleRegister(false)">back</div>
         </div>
+        <!-- /* page2为翻页之后显示的*/ -->
+        <!-- <div class="page2" @click="togoleRegister(false)"></div> -->
       </div>
     </div>
   </div>
@@ -91,38 +86,37 @@ const warFight = ref([
   },
 ]);
 
-const stopMove = onMounted(() => {
-  document.addEventListener("mousewheel", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-  });
-});
-
 const current = ref(0);
-const paperTarget = ref("");
+const oBox = ref();
+const oPage = ref();
 onMounted(() => {
-  let papers = document.querySelectorAll(".paper");
-  let paper = papers[current.value];
-  console.log(paper);
+  // console.log(turn);
+  oBox.value = document.getElementById("box");
+  oPage.value = document.querySelectorAll(".page");
 });
-
-onMounted(() => {
-  var papers = document.querySelectorAll(".paper");
-  document.querySelector(".book").addEventListener("click", function () {
-    var curentPapper = papers[current.value];
-    curentPapper.classList.add("current");
-    curentPapper.classList.add("flip");
-    Array.from(papers).forEach(function (paper, index) {
-      if (index !== current.value) {
-        paper.classList.remove("current");
-      }
-    });
+const togoleRegister = (val) => {
+  // console.log(oPage.value);
+  let currentPage = oPage.value[current.value];
+  if (val === true) {
+    // Array.from(oPage.value).forEach((item: any, index) => {
+    //   item.value.style.transform = "perspective(1600px) rotateY(-180deg)";
+    //   current.value += 1;
+    // });
+    console.log(currentPage);
+    currentPage.style.transform = "perspective(1600px) rotateY(-180deg)";
+    currentPage.style.right = "perspective(1600px) rotateY(-180deg)";
     current.value += 1;
-    if (current.value >= papers.length) {
+    if (current.value === oPage.value.length) {
       current.value = 0;
     }
-  });
-});
+  } else {
+    currentPage.style.transform = "perspective(1600px) rotateY(0deg)";
+    current.value -= 1;
+    if (current.value === -1) {
+      current.value = oPage.value.length - 1;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -216,58 +210,60 @@ onMounted(() => {
   float: left;
   position: relative;
 }
-.book {
+#box {
   width: 80%;
-  height: 80%;
-  background: #fff;
-  perspective: 1000px;
+  height: 90%;
+  margin: 3% 10%;
   position: relative;
-  transform: translate(12.5%, 12.5%);
-}
-.paper {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  width: 50%;
-  height: 100%;
-  transform-style: preserve-3d;
-  transform-origin: left center;
-  transition: all 1s ease-in;
-}
-.paper {
-  z-index: 2;
-}
-.paper.current + .paper {
-  z-index: 20;
-}
-.paper.current {
-  z-index: 40;
-}
-.page {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  font-size: 6vw;
-  color: #fff;
-  backface-visibility: hidden;
-}
-.page.front {
-  background: rgb(0, 177, 150);
-}
-.page.back {
-  background: rgb(154, 155, 154);
-  transform: rotateY(180deg);
-}
-.paper.flip {
-  transform: rotateY(-180deg);
-}
-.paper.flipback {
-  transform: rotateY(180deg);
+
+  .page {
+    /* 因为其在展示区右侧，所以宽度为整个box的一般，并定在右侧 */
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0%;
+    position: absolute;
+    /* 将开启3d空间，方便翻页后front和back的3d变换 */
+    transform-style: preserve-3d;
+    /* 奇点设为左边 */
+    transform-origin: left center;
+    /* 设置翻书（旋转）的运动时间，运动形式 */
+    transition: 1s all ease;
+    /* 提升层级否则会被盖住 */
+    z-index: 2;
+    /* 设置景深来更好的展示3D效果，并给旋转角度一个初始值，防止抖动发生 */
+    transform: perspective(800px) rotateY(0deg);
+    display: flex;
+
+    // 旋转前页
+    .front {
+      /* 宽高与父级page一样 */
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      /* backface-visibility属性和3D transform效果相关，它决定当一个元素的背面面是否可见 */
+      backface-visibility: hidden;
+      /* 提升层级否则会被盖住 */
+      z-index: 10;
+      background-color: forestgreen;
+    }
+
+    // 旋转后页
+    .back {
+      /* 宽高与父级page一样 */
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      /* 这里设置将back进行水平方向上的镜像变化，因为当page旋转180°后， back显示的效果不对*/
+      transform: scale(-1, 1);
+      /* 改变层级避免盖住其他页面 */
+      z-index: 5;
+      background-color: lightblue;
+    }
+  }
 }
 </style>
