@@ -158,7 +158,12 @@ export default {};
 
 .more-info {
   .link-item {
+<<<<<<< HEAD
     flex: 1;
+=======
+    width: 68px;
+    height: 24px;
+>>>>>>> map/dev
     text-align: center;
     border-radius: 2px;
     line-height: 24px;

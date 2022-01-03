@@ -1,14 +1,18 @@
 <template>
-  <div id="container"></div>
+  <suspense>
+    <div id="container"></div>
+  </suspense>
 </template>
 
-<script>
+<script lang="ts">
 // @ts-nocheck
 import BMap from "BMap";
 import useCustomCover from "@/hooks/useCustomCover";
 import useRandomCustom from "@/hooks/useRandomCustom";
 import { getWarData } from "@/api/map";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
+import { ref } from "@vue/reactivity";
+// import { createGlobalState } from "@vueuse/core";
 
 export default {
   setup(props, { emit }) {
@@ -41,10 +45,11 @@ export default {
         birth: "由远东国际军事法庭判处无期徒刑",
       },
     ]);
-    let allWarData = getAllWarAboutYear(1931);
-    console.log(allWarData);
+    // let allWarData = ref([]);
+    // 当前年份所有战争信息
 
-    onMounted(() => {
+    // store.commit("map/GetWarData", 1931);
+    onMounted(async () => {
       // 创建地图实例
       let map = new BMap.Map("container");
 
@@ -64,44 +69,47 @@ export default {
       // 比例尺控件
       map.addControl(new BMap.ScaleControl());
 
+      // 获取战争详情数据
+      let { data: allWarData } = await getWarData(1931);
+      // console.log(allWarData);
       // 存放战争标记信息
       let warSquareArr = [];
-      let data = [
-        {
-          lat: 41.8,
-          lon: 123.43,
-          place: "沈阳",
-        },
-      ];
-      console.log(data);
+      // 存储当前点击的战争索引
+      // let warIndex = 0;
+
       // 循环遍历添加一个或多个战争标记
-      for (let i = 0; i < data.length; i++) {
-        let marker = new BMap.Marker(
-          new BMap.Point(data.warfareCenter[i].lon, data.warfareCenter[i].lat)
-        );
-        map.addOverlay(marker);
-        marker.setZIndex(999);
-        warSquareArr.push(marker);
+      for (let i = 0; i < allWarData.length; i++) {
+        for (let y = 0; y < allWarData[i].warfareCenter.length; y++) {
+          // 经纬度
+          let lon = allWarData[i].warfareCenter[y].lon;
+          let lat = allWarData[i].warfareCenter[y].lat;
 
-        // 地图标记点击事件
-        let timer = null;
-        marker.addEventListener("click", function () {
-          // 将标点移动到中心
-          let point = new BMap.Point(data[i].lon, data[i].lat);
-          map.panTo(point);
+          // 战争标记
+          let marker = new BMap.Marker(new BMap.Point(lon, lat));
+          map.addOverlay(marker);
+          marker.setZIndex(999);
+          warSquareArr.push(marker);
 
-          if (getNowZoom.value == 5) {
-            timer = setTimeout(() => {
-              // 地图级别+1
-              map.setZoom(map.getZoom() + 2);
-              clearTimeout(timer);
-            }, 500);
-          }
+          // 地图标记点击事件
+          let timer = null;
+          marker.addEventListener("click", function () {
+            // 将标点移动到中心
+            let point = new BMap.Point(lon, lat);
+            map.panTo(point);
 
-          // 让弹出框显示
-          // jumpBox.value = true;
-          emit("handleWarOpen", true);
-        });
+            if (getNowZoom.value == 5) {
+              timer = setTimeout(() => {
+                // 地图级别+1
+                map.setZoom(map.getZoom() + 2);
+                clearTimeout(timer);
+              }, 500);
+            }
+
+            // 让弹出框显示
+            // jumpBox.value = true;
+            emit("handleWarOpen", true);
+          });
+        }
       }
 
       // 创建战争圈标记
@@ -125,26 +133,31 @@ export default {
       // 存放人物标记信息
       let peopleSquareArr = [];
       // 循环遍历添加多个人物标记
-      for (let i = 0; i < warPeopleList.value.length; i++) {
-        let peopleSquare = new useRandomCustom(
-          new BMap.Point(
-            Number(data[0].lon + peopleArr[i].lonDiffer),
-            Number(data[0].lat + peopleArr[i].latDiffer)
-          ),
-          40,
-          warPeopleList.value[i].picture
-        );
-        map.addOverlay(peopleSquare);
-
-        // 人物标记点击
-        peopleSquare.addEventListener("click", function () {
-          // console.log(nowPeoplaeSquare);
-
-          emit("handlePeopleOpen", true, warPeopleList.value[i]);
-        });
-
-        peopleSquare.hide();
-        peopleSquareArr.push(peopleSquare);
+      for (let i = 0; i < allWarData.length; i++) {
+        for (let y = 0; y < allWarData[i].warfareCenter.length; y++) {
+          for (let z = 0; z < warPeopleList.value.length; z++) {
+            // 经纬度
+            let lon = allWarData[i].warfareCenter[y].lon;
+            let lat = allWarData[i].warfareCenter[y].lat;
+            // 人物标记
+            let peopleSquare = new useRandomCustom(
+              new BMap.Point(
+                Number(lon + peopleArr[z].lonDiffer),
+                Number(lat + peopleArr[z].latDiffer)
+              ),
+              40,
+              warPeopleList.value[z].picture
+            );
+            map.addOverlay(peopleSquare);
+            // 人物标记点击
+            peopleSquare.addEventListener("click", function () {
+              // console.log(nowPeoplaeSquare);
+              emit("handlePeopleOpen", true, warPeopleList.value[i]);
+            });
+            peopleSquare.hide();
+            peopleSquareArr.push(peopleSquare);
+          }
+        }
       }
 
       // 监听地图缩放事件
@@ -172,19 +185,6 @@ export default {
     });
   },
 };
-
-// 根据年份获取当前年份所有战争
-function getAllWarAboutYear(year) {
-  let allWarData = ref();
-
-  getWarData(year).then((res) => {
-    // console.log(res);
-    allWarData.value = res.data;
-    // console.log(allWarData.value);
-  });
-
-  return allWarData;
-}
 </script>
 
 <style lang="scss" scope>
