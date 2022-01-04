@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.16.1 ]
     steps:
       # 切换分支
       - name: Checkout
