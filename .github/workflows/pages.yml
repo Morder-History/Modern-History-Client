@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: GitHub Actions deploy
 on:
   push:
     branches:
@@ -16,8 +16,9 @@ jobs:
       # npm install
       - name: npm install and build 🔧
         run: |
-          npm install
-          npm run build
+          npm i yarn -g
+          yarn install
+          yarn build
         env:
           CI: true
       # Deploy
