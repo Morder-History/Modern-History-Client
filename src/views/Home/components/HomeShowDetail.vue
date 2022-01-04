@@ -17,20 +17,33 @@
     <div class="second-right">
       <!-- /* box为整个页面展示区 */ -->
       <div id="box">
-        <!-- /* page有前后两面 */ -->
-        <div class="page" v-for="item in 5" :key="item">
-          <div class="front" @click="togoleRegister(true)">front</div>
-          <div class="back" @click="togoleRegister(false)">back</div>
+        <!-- 封面 -->
+        <div class="cover">
+          <img src="../../../assets/images/cover.png" alt="" />
         </div>
-        <!-- /* page2为翻页之后显示的*/ -->
-        <!-- <div class="page2" @click="togoleRegister(false)"></div> -->
+        <!-- /* page有前后两面 */ -->
+        <div
+          class="page"
+          v-for="(item, index) in 5"
+          :style="{ zIndex: turnPage ? 5 - index : index++ }"
+          :key="item"
+        >
+          <div class="front" @click="togoleRegister(true)">
+            front{{ index + 1 }}
+          </div>
+          <div class="back" @click="togoleRegister(false)">
+            back{{ index + 1 }}
+          </div>
+        </div>
+        <!-- 尾页 -->
+        <div class="backpart"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 ("HomeShowDetail");
 // 初始化数据
 const warFight = ref([
@@ -87,36 +100,54 @@ const warFight = ref([
 ]);
 
 const current = ref(0);
+const turnPage = ref(true);
 const oBox = ref();
 const oPage = ref();
 onMounted(() => {
-  // console.log(turn);
   oBox.value = document.getElementById("box");
   oPage.value = document.querySelectorAll(".page");
 });
+//#region 翻页功能
 const togoleRegister = (val) => {
   // console.log(oPage.value);
+  // 获取当前Dom的位置
   let currentPage = oPage.value[current.value];
+
+  // 判断值
   if (val === true) {
-    // Array.from(oPage.value).forEach((item: any, index) => {
-    //   item.value.style.transform = "perspective(1600px) rotateY(-180deg)";
-    //   current.value += 1;
-    // });
-    console.log(currentPage);
+    // 添加样式
+    Array.from(oPage.value).forEach((item, index) => {
+      item.classList.remove("current");
+      turnPage.value = true;
+    });
     currentPage.style.transform = "perspective(1600px) rotateY(-180deg)";
-    currentPage.style.right = "perspective(1600px) rotateY(-180deg)";
-    current.value += 1;
-    if (current.value === oPage.value.length) {
-      current.value = 0;
-    }
-  } else {
-    currentPage.style.transform = "perspective(1600px) rotateY(0deg)";
-    current.value -= 1;
-    if (current.value === -1) {
+    currentPage.classList.add("current");
+
+    // 页面递增
+    if (current.value >= oPage.value.length - 1) {
       current.value = oPage.value.length - 1;
+      return;
     }
+    current.value += 1;
+  } else {
+    // 添加样式
+    currentPage.style.transform = "perspective(1600px) rotateY(0deg)";
+    currentPage.classList.remove("current");
+    Array.from(oPage.value).forEach((item, index) => {
+      if (current.value === index) {
+        currentPage.classList.add("current");
+        turnPage.value = false;
+      }
+    });
+    // 页面递减
+    if (current.value <= 0) {
+      current.value = 0;
+      return;
+    }
+    current.value -= 1;
   }
 };
+//#endregion
 </script>
 
 <style lang="scss" scoped>
@@ -215,6 +246,7 @@ const togoleRegister = (val) => {
   height: 90%;
   margin: 3% 10%;
   position: relative;
+  border-radius: 10px;
 
   .page {
     /* 因为其在展示区右侧，所以宽度为整个box的一般，并定在右侧 */
@@ -229,41 +261,58 @@ const togoleRegister = (val) => {
     transform-origin: left center;
     /* 设置翻书（旋转）的运动时间，运动形式 */
     transition: 1s all ease;
-    /* 提升层级否则会被盖住 */
-    z-index: 2;
     /* 设置景深来更好的展示3D效果，并给旋转角度一个初始值，防止抖动发生 */
-    transform: perspective(800px) rotateY(0deg);
+    transform: perspective(1600px);
     display: flex;
 
-    // 旋转前页
-    .front {
-      /* 宽高与父级page一样 */
+    .front,
+    .back {
       width: 100%;
       height: 100%;
       position: absolute;
       left: 0;
       top: 0;
+    }
+    // 旋转前页
+    .front {
       /* backface-visibility属性和3D transform效果相关，它决定当一个元素的背面面是否可见 */
       backface-visibility: hidden;
       /* 提升层级否则会被盖住 */
-      z-index: 10;
+      z-index: 1;
       background-color: forestgreen;
     }
 
     // 旋转后页
     .back {
-      /* 宽高与父级page一样 */
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
       /* 这里设置将back进行水平方向上的镜像变化，因为当page旋转180°后， back显示的效果不对*/
       transform: scale(-1, 1);
       /* 改变层级避免盖住其他页面 */
-      z-index: 5;
+      z-index: 0;
       background-color: lightblue;
     }
   }
+  .page.current {
+    z-index: 20 !important;
+  }
+}
+.cover {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  > img {
+    width: 100%;
+    height: 100%;
+  }
+}
+.backpart {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  background-color: #ca262d;
 }
 </style>
