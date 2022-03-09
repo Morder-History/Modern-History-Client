@@ -55,6 +55,6 @@ const generateRequestConfig = (url: string, method: string, data: any) => ({
 });
 
 // 请求函数（不带Token）
-export default function request(url: string, method: string, data: any) {
+export default function request(url: string, method: string, data?: any) {
   return _axios(generateRequestConfig(url, method, data));
 }
