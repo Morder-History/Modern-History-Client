@@ -9,6 +9,17 @@
   <link rel="icon" href="<%= BASE_URL %>logo.jpg" />
   <title>印象-中国抗日战争史实博物馆</title>
   <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=3.0&ak=IoutUGo6SaFtmhnWZ8cSaPda74aRyPlT"></script>
+  <!-- 使用CDN的CSS文件 -->
+  <% for (var i in
+  htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
+  <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
+  <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+  <% } %>
+  <!-- 使用CDN加速的JS文件，配置在vue.config.js下 -->
+  <% for (var i in
+  htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
+  <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+  <% } %>
 </head>
 
 <body>
