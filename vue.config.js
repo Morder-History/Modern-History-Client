@@ -40,6 +40,11 @@ module.exports = {
         "window.jQuery": "jquery",
       },
     ]);
+    // 去掉console.log
+    config.optimization.minimizer("terser").tap((args) => {
+      args[0].terserOptions.compress.drop_console = true;
+      return args;
+    });
   },
   devServer: {
     proxy: {
@@ -60,4 +65,6 @@ module.exports = {
   filenameHashing: true,
   lintOnSave: true,
   runtimeCompiler: false,
+  //去除生产环境的productionSourceMap
+  productionSourceMap: false,
 };
