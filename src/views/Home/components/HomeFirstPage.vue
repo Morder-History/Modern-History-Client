@@ -8,7 +8,7 @@
     <div class="home-left">
       <!-- 标题名 -->
       <div class="home-title">
-        <img src="../../../assets/images/1640179657_348262.png" alt="" />
+        <img src="https://s1.ax1x.com/2022/03/09/bWy3jS.png" alt="" />
       </div>
       <!-- 索引展示 -->
       <div class="home-index">
@@ -64,7 +64,7 @@
             </li>
             <li>
               <p>战争时间：</p>
-              <span>{{ item.moreInfo.happenTiem }}</span>
+              <span>{{ item.moreInfo.happenTime }}</span>
             </li>
             <li>
               <p>战争结果：</p>
