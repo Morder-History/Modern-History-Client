@@ -1,9 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-const Home = () =>
-  import(/*webpackChunkName: 'Home'*/ "@/views/Home/HomePage.vue");
-import Map from "@/views/Map/Map.vue";
-import Video from "@/views/Video/VideoPage.vue";
-import Book from "@/views/Book/BookPage.vue";
+import Home from "@/views/Home/HomePage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,17 +14,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/map",
     name: "Map",
-    component: Map,
+    component: () => import(/*webpackChunkName: 'map'*/ "@/views/Map/Map.vue"),
   },
   {
     path: "/video",
     name: "Video",
-    component: Video,
+    component: () =>
+      import(/*webpackChunkName: 'video'*/ "@/views/Video/VideoPage.vue"),
   },
   {
     path: "/book",
     name: "Book",
-    component: Book,
+    component: () =>
+      import(/*webpackChunkName: 'book'*/ "@/views/Book/BookPage.vue"),
   },
 ];
 
