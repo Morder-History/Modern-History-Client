@@ -25,24 +25,91 @@
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+<script lang="js">
+import {ref} from "vue";
+import {useRoute, useRouter} from "vue-router";
+// 中国抗日战争全记录书籍路径
+let fullRecord = [
+  "https://s1.ax1x.com/2022/03/09/bRl02V.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlw80.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRldCq.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlNUs.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlU5n.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlBvT.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlsrF.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlyb4.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlcVJ.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlga9.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRl25R.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlWP1.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlf8x.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRl4xK.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlh26.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlorD.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlTqe.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlHVH.jpg",
+  "https://s1.ax1x.com/2022/03/09/bRlbad.jpg",
+];
+// 日军镜头中的抗日战争
+let reporterMeans = [
+  "https://s1.ax1x.com/2022/03/09/bR1kin.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1pqg.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1CZQ.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1Paj.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1iIs.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1eMT.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1AGq.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1VzV.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1ER0.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1msU.jpg",
+  "https://s1.ax1x.com/2022/03/09/bR1nLF.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTJQe.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTdot.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTtLd.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhT8zD.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTYsH.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTUeA.jpg",
+  "https://s1.ax1x.com/2022/03/10/bhTadI.jpg",
+];
+// 书籍数据
+let bookList = [
+  {
+    id: 1,
+    bookName: "中国抗日战争全记录",
+    cover: "https://s1.ax1x.com/2022/03/09/bRl02V.jpg",
+    hover: false,
+    picNum: 18,
+  },
+  {
+    id: 2,
+    bookName: "日军镜头中的抗日战争",
+    cover: "https://s1.ax1x.com/2022/03/09/bR1kin.jpg\n",
+    hover: false,
+    picNum: 18,
+  },
+];
+
 export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
 
-    let url = ref(
-      `background-image: url(${require("../../assets/images/" +
-        route.params.url)}) !important;`
-    );
+    let url = ref("");
 
     let picList = ref({
-      title: route.query.bookName,
-      picNum: Number(route.params.picNum),
+      title: "",
+      picNum: "",
       blank: false,
     });
+    bookList.forEach((item) => {
+      if (route.query.bookName === item.bookName) {
+        url.value = `background-image: url(${item.cover}) !important;`
+        picList.value.title = item.bookName
+        picList.value.picNum = item.picNum
+        picList.value.blank = item.hover
+      }
+    });
+
 
     // 处理图片路径
     const imgUrl = (item) => {
@@ -50,10 +117,10 @@ export default {
 
       if (picList.value.title === "中国抗日战争全记录") {
         picList.value.blank = false;
-        return require("@/assets/images/FullRecord/" + num + ".jpg");
+        return fullRecord[num - 1];
       } else if (picList.value.title === "日军镜头中的抗日战争") {
         picList.value.blank = false;
-        return require("@/assets/images/ReporterMeans/" + num + ".jpg");
+        return reporterMeans[num - 1];
       } else {
         picList.value.blank = true;
       }
