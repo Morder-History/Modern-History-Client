@@ -194,7 +194,7 @@ body,
             display: inline-block;
             width: 16px;
             height: 60px;
-            background-image: url("../../assets/images/sprite-play-aura3@2x.png");
+            background-image: url("~@/assets/images/sprite-play-aura3@2x.png");
             background-size: 200px 140px;
             cursor: pointer;
           }
@@ -291,7 +291,7 @@ body,
               top: 0.79vw;
               width: 0.66vw;
               height: 0.59vw;
-              background: url("../../assets/images/playon-green.gif") no-repeat;
+              background: url("~@/assets/images/playon-green.gif") no-repeat;
             }
 
             .playon-icon {

@@ -59,7 +59,7 @@ export default {
       }
 
       #home {
-        background: url("../assets/images/bgImage.jpg") !important;
+        background: url("~@/assets/images/bgImage.jpg") !important;
         background-size: 100% 100% !important;
       }
 

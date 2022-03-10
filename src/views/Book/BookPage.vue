@@ -192,7 +192,7 @@ body,
     #flipbook {
       /* 书籍封面和背面，仿硬纸板样式 */
       .hard {
-        background-image: url("../../assets/images/book-covers.jpg") !important;
+        background-image: url("~@/assets/images/book-covers.jpg") !important;
         text-align: center;
         font-weight: bold;
         font-size: 20px;
@@ -211,12 +211,12 @@ body,
       }
 
       .p2 {
-        background: url("../../assets/images/covers.jpg") !important;
+        background: url("~@/assets/images/covers.jpg") !important;
         background-position: -471px 0 !important;
       }
 
       #last {
-        background: url("../../assets/images/covers.jpg") !important;
+        background: url("~@/assets/images/covers.jpg") !important;
         background-position: -942px 0 !important;
       }
 

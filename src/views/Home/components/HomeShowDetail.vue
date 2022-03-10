@@ -79,7 +79,7 @@ export default {
       {
         id: 2,
         bookName: "日军镜头中的抗日战争",
-        cover: "https://s1.ax1x.com/2022/03/09/bR1kin.jpg\n",
+        cover: "https://s1.ax1x.com/2022/03/09/bR1kin.jpg",
         hover: false,
         picNum: 18,
       },
@@ -134,7 +134,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: url("../../../assets/images/splash-bg.jpg") bottom left repeat-x;
+  background: url("~@/assets/images/splash-bg.jpg") bottom left repeat-x;
   font-family: "District Thin", helvetica, arial;
 
   .center {
@@ -153,7 +153,7 @@ export default {
         display: inline-block;
         width: 400px;
         height: 82px;
-        background: url("../../../assets/images/libraryBag.png") no-repeat;
+        background: url("~@/assets/images/libraryBag.png") no-repeat;
         background-size: 100%;
         background-position: -22px 0;
         margin-left: -2px;
@@ -250,7 +250,7 @@ export default {
 
         .row-1::after,
         .row-2::after {
-          background: url("../../../assets/images/wall-bookshelf.png");
+          background: url("~@/assets/images/wall-bookshelf.png");
           background-size: 100%;
           background-repeat: no-repeat;
           background-position: bottom left;
