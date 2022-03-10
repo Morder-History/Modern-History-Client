@@ -2,7 +2,7 @@
   <div class="collection">
     <div class="left">
       <h1>七九式步枪</h1>
-      <img src="../../../assets/images/78.png" alt="" />
+      <img src="@/assets/images/78.png" alt="" />
     </div>
     <div class="right">
       <h1>七九式步枪 介绍</h1>

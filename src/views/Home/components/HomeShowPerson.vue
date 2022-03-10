@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card One</h2>
@@ -15,7 +15,7 @@
     </div>
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card Two</h2>
@@ -28,7 +28,7 @@
     </div>
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card Three</h2>
@@ -41,7 +41,7 @@
     </div>
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card Three</h2>
@@ -54,7 +54,7 @@
     </div>
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card Three</h2>
@@ -67,7 +67,7 @@
     </div>
     <div class="card">
       <div class="imgBx">
-        <img src="../../../assets/images/1.gif" alt="" />
+        <img src="@/assets/images/1.gif" alt="" />
       </div>
       <div class="content">
         <h2>Card Three</h2>

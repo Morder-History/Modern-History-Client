@@ -7,26 +7,26 @@
         <!-- 图书馆logo -->
         <i class="libraryLogo"></i>
         <h1>
-          <font>部分抗战书籍展览</font>
+          <div>部分抗战书籍展览</div>
         </h1>
         <ul>
           <li>
-            <font>中国人民抗日战争</font>
+            <div>中国人民抗日战争</div>
           </li>
           <li>
-            <font>是中华民族历史上最伟大的卫国战争</font>
+            <div>是中华民族历史上最伟大的卫国战争</div>
           </li>
           <li>
-            <font>是中国人民反抗日本帝国主义侵略的正义战争</font>
+            <div>是中国人民反抗日本帝国主义侵略的正义战争</div>
           </li>
           <li>
-            <font>是世界反法西斯战争的重要组成部分</font>
+            <div>是世界反法西斯战争的重要组成部分</div>
           </li>
           <li>
-            <font>也是中国近代以来抗击外敌入侵</font>
+            <div>也是中国近代以来抗击外敌入侵</div>
           </li>
           <li>
-            <font>第一次取得完全胜利的民族解放战争</font>
+            <div>第一次取得完全胜利的民族解放战争</div>
           </li>
         </ul>
       </div>
@@ -44,8 +44,7 @@
                   @mouseenter="handleEnterBook(item)"
                   @mouseleave="handleLeaveBook"
                   @click="handleOpenBook(item)"
-                  :style="`background-image: url(${require('../../../assets/images/' +
-                    item.cover)})`"
+                  :style="`background-image: url(${item.cover})`"
                 ></div>
               </div>
             </div>
@@ -53,7 +52,7 @@
           <div class="row-2"></div>
         </div>
         <div class="suggestion">
-          <font style="vertical-align: inherit">↑ 点击一本书查看</font>
+          <div style="vertical-align: inherit">↑ 点击一本书查看</div>
         </div>
       </div>
     </div>
@@ -73,23 +72,16 @@ export default {
       {
         id: 1,
         bookName: "中国抗日战争全记录",
-        cover: "FullRecord/1.jpg",
+        cover: "https://s1.ax1x.com/2022/03/09/bRl02V.jpg",
         hover: false,
         picNum: 18,
       },
       {
         id: 2,
         bookName: "日军镜头中的抗日战争",
-        cover: "ReporterMeans/1.jpg",
+        cover: "https://s1.ax1x.com/2022/03/09/bR1kin.jpg",
         hover: false,
         picNum: 18,
-      },
-      {
-        id: 3,
-        bookName: "九一八事变",
-        cover: "918.png",
-        hover: false,
-        picNum: 6,
       },
     ]);
 
@@ -142,7 +134,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: url("../../../assets/images/splash-bg.jpg") bottom left repeat-x;
+  background: url("~@/assets/images/splash-bg.jpg") bottom left repeat-x;
   font-family: "District Thin", helvetica, arial;
 
   .center {
@@ -161,7 +153,7 @@ export default {
         display: inline-block;
         width: 400px;
         height: 82px;
-        background: url("../../../assets/images/libraryBag.png") no-repeat;
+        background: url("~@/assets/images/libraryBag.png") no-repeat;
         background-size: 100%;
         background-position: -22px 0;
         margin-left: -2px;
@@ -258,7 +250,7 @@ export default {
 
         .row-1::after,
         .row-2::after {
-          background: url("../../../assets/images/wall-bookshelf.png");
+          background: url("~@/assets/images/wall-bookshelf.png");
           background-size: 100%;
           background-repeat: no-repeat;
           background-position: bottom left;
