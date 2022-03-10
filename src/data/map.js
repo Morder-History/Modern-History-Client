@@ -582,8 +582,8 @@ function getWarInfo(warInfo, year) {
   return res1;
 }
 
-let result = getWarInfo(warInfo, 1931);
-console.log(result);
+// let result = getWarInfo(warInfo, 1931);
+// console.log(result);
 
 let legendData = [
   "1931年",
