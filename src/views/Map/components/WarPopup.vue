@@ -12,12 +12,12 @@
           <div class="territory-wrap">
             <div class="base-info">
               <div class="title">
-                <b
-                  title="观看纪录片"
-                  @click="handleGoVideo(jumpWarBox.warName)"
-                >
+                <b>
                   {{ jumpWarBox.warName }}
                 </b>
+                <span @click="handleGoVideo(jumpWarBox.warName)">
+                  观看纪录片
+                </span>
               </div>
               <div class="desc-box">
                 <mavon-editor
@@ -146,6 +146,14 @@ export default {
 
       b {
         cursor: pointer;
+      }
+
+      span {
+        float: right;
+        font-size: 12px;
+        color: red;
+        cursor: pointer;
+        margin-right: 30px;
       }
     }
 
