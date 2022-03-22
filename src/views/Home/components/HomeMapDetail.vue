@@ -3,7 +3,7 @@
     <v-chart class="chart" :option="map" autoresize ref="map" />
     <div class="home-to-map">
       <p>想知道更多相关的信息吗？</p>
-      <router-link to="/map">跳转到详细地图 ——&gt;</router-link>
+      <router-link to="/map" target="_blank">跳转到详细地图 ——&gt;</router-link>
     </div>
   </div>
 </template>

@@ -14,19 +14,22 @@
       <div class="section section2" style="zoom: 1 !important">
         <HomeShowDetail></HomeShowDetail>
       </div>
+      <!-- 第三页 -->
       <div class="section section3">
         <HomeMapDetail></HomeMapDetail>
       </div>
+      <!-- 第四页 -->
       <div class="section section4">
         <HomeShowCollection></HomeShowCollection>
       </div>
+      <!-- 第五页 -->
       <div class="section section5">
         <HomeShowPerson></HomeShowPerson>
       </div>
-
+      <!-- 第六页 -->
       <div class="section section6">6</div>
     </div>
-    <div class="ico_down" v-if="current <= 4" @click="next"></div>
+    <div class="ico_down" v-if="current <= 5" @click="next"></div>
     <div class="ico_Up" v-if="current >= 1" @click="prev"></div>
   </div>
 </template>
@@ -48,7 +51,6 @@ const mainPage = ref();
 const fullPage = ref();
 const deltaY = ref(0);
 const route = useRoute();
-// console.log(route.query);
 
 // next()
 const next = () => {
@@ -80,7 +82,6 @@ const move = (index: number) => {
 };
 // directToMove()
 const directToMove = onMounted(() => {
-  console.log(11);
   let height = mainPage.value.clientHeight;
   let scrollPage = fullPage.value;
   let scrollHeight;
