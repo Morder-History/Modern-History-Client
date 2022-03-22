@@ -27,15 +27,29 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { PropType } from "vue";
+interface PeopleCartData {
+  id: number;
+  name: string;
+  nation: string;
+  dead: string;
+  deathCause: string;
+  photos: string[];
+  life: string;
+  introduction: string;
+}
+
 export default {
-  // props: ["toggle", "item"],
   props: {
     toggle: {
       type: Boolean,
+      default: true,
+      required: true,
     },
     item: {
-      type: Object,
+      type: Object as PropType<PeopleCartData>,
+      required: true,
     },
   },
   setup(props) {
