@@ -2,7 +2,7 @@
   <div class="card">
     <!-- 所属国家 -->
     <div class="belong">
-      <img src="../../assets/images/China.jpg" alt="" />
+      <img src="@/assets/images/China.jpg" alt="" />
     </div>
     <div class="content">
       <!-- 人物信息 -->
@@ -29,7 +29,15 @@
 
 <script>
 export default {
-  props: ["toggle", "item"],
+  // props: ["toggle", "item"],
+  props: {
+    toggle: {
+      type: Boolean,
+    },
+    item: {
+      type: Object,
+    },
+  },
   setup(props) {
     return {
       props,
