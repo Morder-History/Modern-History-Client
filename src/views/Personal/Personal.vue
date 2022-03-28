@@ -21,12 +21,12 @@
             <li>
               <label>简介</label>
               <h4>
-                {{ people.introduction }}
+                {{ people.jianjie }}
               </h4>
             </li>
             <li>
               <label>逝世原因</label>
-              <h4>{{ people.deathCause }}</h4>
+              <h4>{{ people.birth }}</h4>
             </li>
           </ul>
         </div>
@@ -47,7 +47,7 @@
       <div class="people-life">
         <div class="life">
           <p>
-            {{ people.life }}
+            {{ people.shengping }}
           </p>
         </div>
       </div>
@@ -56,26 +56,40 @@
 </template>
 
 <script>
-import SwiperCore, { EffectFade } from "swiper";
+import SwiperCore, { EffectFade, Autoplay } from "swiper";
 import "swiper/swiper-bundle.min.css";
 import "swiper/swiper-bundle.min.js";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+
+SwiperCore.use([Autoplay]);
 
 export default {
   setup() {
     const route = useRoute();
+    let people = ref(null);
+
+    // 本地存储
+    if (route.params.name) {
+      people.value = route.params;
+      window.localStorage.setItem("peopleData", JSON.stringify(route.params));
+    } else {
+      people.value = JSON.parse(window.localStorage.getItem("peopleData"));
+    }
 
     onMounted(() => {
       new SwiperCore("#swiper1", {
         modules: [EffectFade],
         effect: "fade",
         loop: true,
+        autoplay: {
+          delay: 2000,
+        },
       });
     });
 
     return {
-      people: route.params,
+      people,
     };
   },
 };
@@ -99,7 +113,7 @@ export default {
       text-align: center;
 
       .swiper-slide {
-        background-color: rgba(#000, 0.7);
+        background-color: #000;
       }
 
       img {

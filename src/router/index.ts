@@ -40,7 +40,6 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/*webpackChunkName: 'Personal'*/ "@/views/Personal/Personal.vue"),
   },
-
 ];
 
 const router = createRouter({
