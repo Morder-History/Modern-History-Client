@@ -54,7 +54,7 @@ const route = useRoute();
 
 // next()
 const next = () => {
-  if (current.value < 5) {
+  if (current.value < 2) {
     current.value += 1;
     move(current.value);
   } else {
@@ -68,7 +68,7 @@ const prev = () => {
     current.value -= 1;
     move(current.value);
   } else {
-    current.value = 5;
+    current.value = 2;
     move(current.value);
   }
 };
