@@ -19,15 +19,15 @@
         <HomeMapDetail></HomeMapDetail>
       </div>
       <!-- 第四页 -->
-      <div class="section section4">
+      <!-- <div class="section section4">
         <HomeShowCollection></HomeShowCollection>
-      </div>
+      </div> -->
       <!-- 第五页 -->
       <div class="section section5">
         <HomeShowPerson></HomeShowPerson>
       </div>
       <!-- 第六页 -->
-      <div class="section section6">6</div>
+      <!-- <div class="section section6">6</div> -->
     </div>
     <div class="ico_down" v-if="current <= 5" @click="next"></div>
     <div class="ico_Up" v-if="current >= 1" @click="prev"></div>
@@ -38,7 +38,7 @@
 import HomeMapDetail from "@/views/Home/components/HomeMapDetail.vue";
 import HomeShowDetail from "@/views/Home/components/HomeShowDetail.vue";
 import HomeFirstPage from "@/views/Home/components/HomeFirstPage.vue";
-import HomeShowCollection from "@/views/Home/components/HomeShowCollection.vue";
+// import HomeShowCollection from "@/views/Home/components/HomeShowCollection.vue";
 import HomeShowPerson from "@/views/Home/components/HomeShowPerson.vue";
 
 import { ref } from "@vue/reactivity";
@@ -54,7 +54,7 @@ const route = useRoute();
 
 // next()
 const next = () => {
-  if (current.value < 2) {
+  if (current.value < 3) {
     current.value += 1;
     move(current.value);
   } else {
@@ -68,7 +68,7 @@ const prev = () => {
     current.value -= 1;
     move(current.value);
   } else {
-    current.value = 2;
+    current.value = 3;
     move(current.value);
   }
 };
